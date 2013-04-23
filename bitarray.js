@@ -1,16 +1,28 @@
+// #Bit Array 64
+// * * *
 
+
+// ###Constructor for 64-bit length bit array
+
+
+// This data structure represents a bit array that can contain up to 64 bits
+// represented in such way that the most significant bit is the first one
+// and the least significant one is the last one.
+// The basic constructor takes two 32-bit numbers, that represent the higher and
+// the lower part of the 64-bit number
 function BitArray64(high, low) {
 	this._low = low;
 	this._high = high;
 }
 
-// shorthand creation
+// ###fast creation of bit arrays
 BitArray64.ONE = new BitArray64(0, 1);
 BitArray64.ZERO = new BitArray64(0, 0);
 BitArray64.MAX = new BitArray64( 0xFFFFFFFF, 0xFFFFFFFF );
 
 
-// shift left the bits in the array
+// ###shifting the bits in the array
+// This shifts( moves ) the bits in the array to the left 
 BitArray64.prototype.shiftLeft = function(positions) {
 	if( positions === 0 ) {
 		return this;
@@ -21,7 +33,7 @@ BitArray64.prototype.shiftLeft = function(positions) {
 	}
 }
 
-// shift right the bits in the array
+// This shifts( moves ) the bits in the array to the left
 BitArray64.prototype.shiftRight = function(positions) {
 	if( positions === 0 ) {
 		return this;

@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Bit Array 64</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" media="all" href="public/stylesheets/normalize.css" />
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div class="container">
+    <div class="page">
+
+      <div class="header">
+        
+          
+          <h1>Bit Array 64</h1>
+<hr>
+<h3>Constructor for 64-bit length bit array</h3>
+<p>This data structure represents a bit array that can contain up to 64 bits
+represented in such way that the most significant bit is the first one
+and the least significant one is the last one.
+The basic constructor takes two 32-bit numbers, that represent the higher and
+the lower part of the 64-bit number</p>
+
+          
+            <div class='highlight'><pre><span class="function"><span class="keyword">function</span> <span class="title">BitArray64</span><span class="params">(high, low)</span> {</span>
+	<span class="keyword">this</span>._low = low;
+	<span class="keyword">this</span>._high = high;
+}</pre></div>
+          
+        
+
+        
+      </div>
+
+      
+        
+        <h3>fast creation of bit arrays</h3>
+
+        
+          <div class='highlight'><pre>BitArray64.ONE = <span class="keyword">new</span> BitArray64(<span class="number">0</span>, <span class="number">1</span>);
+BitArray64.ZERO = <span class="keyword">new</span> BitArray64(<span class="number">0</span>, <span class="number">0</span>);
+BitArray64.MAX = <span class="keyword">new</span> BitArray64( <span class="number">0xFFFFFFFF</span>, <span class="number">0xFFFFFFFF</span> );</pre></div>
+        
+      
+        
+        <h3>shifting the bits in the array</h3>
+<p>This shifts( moves ) the bits in the array to the left </p>
+
+        
+          <div class='highlight'><pre>BitArray64.prototype.shiftLeft = <span class="keyword">function</span>(positions) {
+	<span class="keyword">if</span>( positions === <span class="number">0</span> ) {
+		<span class="keyword">return</span> <span class="keyword">this</span>;
+	} <span class="keyword">else</span> <span class="keyword">if</span>( positions &gt;= <span class="number">32</span> ) {
+		<span class="keyword">return</span> <span class="keyword">new</span> BitArray64( <span class="keyword">this</span>._low &lt;<span class="xml"><span class="tag">&lt; ( <span class="attribute">32</span> <span class="attribute">-</span> <span class="attribute">positions</span> ), <span class="attribute">0</span> );
+	} <span class="attribute">else</span> {
+		<span class="attribute">return</span> <span class="attribute">new</span> <span class="attribute">BitArray64</span>( <span class="attribute">this._low</span> &gt;</span>&gt;&gt; (32 - positions) ) | ( this._high <span class="tag">&lt;<span class="title">&lt;</span> <span class="attribute">positions</span> ), <span class="attribute">this._low</span> &lt;&lt; <span class="attribute">positions</span> );
+	}
+}
+
+</span></pre></div>
+        
+      
+        
+        <p>This shifts( moves ) the bits in the array to the left</p>
+
+        
+          <div class='highlight'><pre>BitArray64.prototype.shiftRight = <span class="keyword">function</span>(positions) {
+	<span class="keyword">if</span>( positions === <span class="number">0</span> ) {
+		<span class="keyword">return</span> <span class="keyword">this</span>;
+	} <span class="keyword">else</span> <span class="keyword">if</span>( positions &gt;= <span class="number">32</span> ) {
+		<span class="keyword">return</span> <span class="keyword">new</span> BitArray64( <span class="number">0</span>, <span class="keyword">this</span>._high &gt;&gt;&gt; ( <span class="number">32</span> - positions ) );
+	} <span class="keyword">else</span> {
+		<span class="keyword">return</span> <span class="keyword">new</span> BitArray64( <span class="keyword">this</span>._high &gt;&gt;&gt; (<span class="number">32</span> - positions), <span class="keyword">this</span>._high &lt;<span class="xml"><span class="tag">&lt; (<span class="attribute">32</span> <span class="attribute">-</span> <span class="attribute">positions</span>) | <span class="attribute">this._low</span> &gt;</span>&gt;&gt; positions );
+	}
+}
+
+</span></pre></div>
+        
+      
+        
+        <p>performs bitwise AND</p>
+
+        
+          <div class='highlight'><pre>BitArray64.prototype.and = <span class="keyword">function</span>(other) {
+	<span class="keyword">return</span> <span class="keyword">new</span> BitArray64( <span class="keyword">this</span>._high &amp; other._high, <span class="keyword">this</span>._low &amp; other._low );
+}</pre></div>
+        
+      
+        
+        <p>performs bitwise OR</p>
+
+        
+          <div class='highlight'><pre>BitArray64.prototype.or = <span class="keyword">function</span>(other) {
+	<span class="keyword">return</span> <span class="keyword">new</span> BitArray64( <span class="keyword">this</span>._high | other._high, <span class="keyword">this</span>._low | other._low );
+}</pre></div>
+        
+      
+        
+        <p>performs bitwise XOR</p>
+
+        
+          <div class='highlight'><pre>BitArray64.prototype.xor = <span class="keyword">function</span>(other) {
+	<span class="keyword">return</span> <span class="keyword">new</span> BitArray64( <span class="keyword">this</span>._high ^ other._high, <span class="keyword">this</span>._low ^ other._low );
+}</pre></div>
+        
+      
+        
+        <p>flips the bits in the array, example 1001 -&gt; 0110</p>
+
+        
+          <div class='highlight'><pre>BitArray64.prototype.flip = <span class="keyword">function</span>() {
+	<span class="keyword">return</span> <span class="keyword">new</span> BitArray64( ~<span class="keyword">this</span>._high, ~<span class="keyword">this</span>._low );
+}</pre></div>
+        
+      
+        
+        <p>performs bit negation in the array, example 1001 -&gt; 0, 0 -&gt; 1</p>
+
+        
+          <div class='highlight'><pre>BitArray64.prototype.not = <span class="keyword">function</span>() {
+	<span class="keyword">if</span>( <span class="keyword">this</span>._low === <span class="number">0</span>  || <span class="keyword">this</span>._high === <span class="number">0</span> ) {
+		<span class="keyword">return</span> <span class="keyword">new</span> BitArray64( <span class="number">0xFFFFFFFF</span>, <span class="number">0xFFFFFFFF</span> );
+	} <span class="keyword">else</span> {
+		<span class="keyword">return</span> <span class="keyword">new</span> BitArray64( <span class="number">0</span>, <span class="number">0</span> );
+	}
+}</pre></div>
+        
+      
+        
+        <p>zero test</p>
+
+        
+          <div class='highlight'><pre>BitArray64.prototype.isZero = <span class="keyword">function</span>() {
+	<span class="keyword">return</span> ( <span class="keyword">this</span>._high === <span class="number">0</span> &amp;&amp; <span class="keyword">this</span>._low === <span class="number">0</span> )
+}</pre></div>
+        
+      
+        
+        <p>equality test</p>
+
+        
+          <div class='highlight'><pre>BitArray64.prototype.equal = <span class="keyword">function</span>(other) {
+	<span class="keyword">return</span> ( <span class="keyword">this</span>._high === other._high &amp;&amp; <span class="keyword">this</span>._low === other._low );
+}</pre></div>
+        
+      
+        
+        <p>deep copy the array</p>
+
+        
+          <div class='highlight'><pre>BitArray64.prototype.clone = <span class="keyword">function</span>() {
+	<span class="keyword">return</span> <span class="keyword">new</span> BitArray64( <span class="keyword">this</span>._high, <span class="keyword">this</span>._low );
+}</pre></div>
+        
+      
+        
+        <p>creation from string</p>
+
+        
+          <div class='highlight'><pre>BitArray64.prototype.fromString = <span class="keyword">function</span>(str) {
+	<span class="keyword">if</span>( str.length &gt; <span class="number">64</span> ) <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">"string parameter too long"</span>);
+
+	<span class="keyword">var</span> help = <span class="string">'0000000000000000000000000000000000000000'</span>;
+
+	str = help.slice( <span class="number">64</span> - str.length ) + str;
+
+	<span class="keyword">return</span> <span class="keyword">new</span> BitArray64( parseInt( str.slice(<span class="number">0</span>, <span class="number">32</span>) ), parseInt( str.slice(<span class="number">32</span>) ) );
+}</pre></div>
+        
+      
+        
+        <p>string representation of the board
+opt_radix is optional and defaults to 2</p>
+
+        
+          <div class='highlight'><pre>BitArray64.prototype.toString = <span class="keyword">function</span>(group_by, delimiter) {
+	<span class="keyword">if</span>( !group_by ) group_by = <span class="number">32</span>;
+	<span class="keyword">if</span>( !delimiter ) delimiter = <span class="string">":"</span>;
+
+	<span class="keyword">if</span>( <span class="number">64</span> % group_by &gt; <span class="number">0</span> ) <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">"group_by parameter should be a divider of number 64"</span>);
+
+	<span class="keyword">var</span> res1 = <span class="string">'0000000000000000000000000000000000000000'</span>;
+	<span class="keyword">var</span> res2 = <span class="string">'0000000000000000000000000000000000000000'</span>;
+
+	<span class="keyword">var</span> h = <span class="keyword">this</span>._high.toString(<span class="number">2</span>);
+	<span class="keyword">var</span> l = <span class="keyword">this</span>._low.toString(<span class="number">2</span>);
+
+	<span class="keyword">var</span> res = res1.slice(<span class="number">0</span>, <span class="number">32</span> - h.length) + h + res2.slice(<span class="number">0</span>, <span class="number">32</span> - l.length) + l;
+
+	<span class="keyword">var</span> ret = <span class="string">''</span>;
+	<span class="keyword">for</span>( <span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">64</span> / group_by; i++) {
+		console.log(<span class="string">'tu sam'</span>, i);
+		ret += res.slice(i * group_by, (i+<span class="number">1</span>) * group_by );
+
+		<span class="keyword">if</span>( i + <span class="number">1</span> &lt; (<span class="number">64</span> / group_by)  ) ret += delimiter;
+	}
+
+	<span class="keyword">return</span> ret;
+}</pre></div>
+        
+      
+      <div class="fleur">h</div>
+    </div>
+  </div>
+</body>
+</html>
